@@ -672,6 +672,30 @@ if(VLLM_GPU_LANG STREQUAL "CUDA")
     set(FP4_ARCHS)
   endif()
 
+  # MicroMix Archs and flags
+  if(${CMAKE_CUDA_COMPILER_VERSION} VERSION_GREATER_EQUAL 13.0)
+    cuda_archs_loose_intersection(MICROMIX_ARCHS "12.0f" "${CUDA_ARCHS}")
+  else()
+    cuda_archs_loose_intersection(MICROMIX_ARCHS "12.0a" "${CUDA_ARCHS}")
+  endif()
+  if(${CMAKE_CUDA_COMPILER_VERSION} VERSION_GREATER_EQUAL 12.8 AND MICROMIX_ARCHS)
+    set(SRCS
+      "csrc/quantization/micromix/reorder_quant.cu"
+      "csrc/quantization/micromix/blockscaled_gemm.cu"
+      "csrc/quantization/micromix/torch_binding.cpp")
+    set_gencode_flags_for_srcs(
+      SRCS "${SRCS}"
+      CUDA_ARCHS "${MICROMIX_ARCHS}")
+    list(APPEND VLLM_EXT_SRC "${SRCS}")
+    # list(APPEND VLLM_GPU_FLAGS "-DENABLE_NVFP4_SM100=1")
+    list(APPEND VLLM_GPU_FLAGS "-DCUTLASS_DEBUG_TRACE_LEVEL=2")
+    message(STATUS "Building MicroMix for archs: ${MICROMIX_ARCHS}")
+  else()
+    message(STATUS "Not building MicroMix as no compatible archs were found.")
+    # clear MICROMIX_ARCHS
+    set(MICROMIX_ARCHS)
+  endif()
+
   # FP4 Archs and flags
   if(${CMAKE_CUDA_COMPILER_VERSION} VERSION_GREATER_EQUAL 13.0)
     cuda_archs_loose_intersection(FP4_ARCHS "10.0f;11.0f" "${CUDA_ARCHS}")

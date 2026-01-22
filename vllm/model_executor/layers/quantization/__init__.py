@@ -9,6 +9,7 @@ from vllm.model_executor.layers.quantization.base_config import QuantizationConf
 logger = init_logger(__name__)
 
 QuantizationMethods = Literal[
+    "micromix",
     "awq",
     "deepspeedfp",
     "fp8",
@@ -145,8 +146,10 @@ def get_quantization_config(quantization: str) -> type[QuantizationConfig]:
     from .ptpc_fp8 import PTPCFp8Config
     from .rtn import RTNConfig
     from .torchao import TorchAOConfig
+    from .micromix import MicroMixConfig
 
     method_to_config: dict[str, type[QuantizationConfig]] = {
+        "micromix": MicroMixConfig,
         "awq": AWQConfig,
         "deepspeedfp": DeepSpeedFPConfig,
         "fp8": Fp8Config,
