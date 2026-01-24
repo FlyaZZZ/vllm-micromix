@@ -465,6 +465,14 @@ class Qwen2Model(nn.Module):
         params_dict = dict(self.named_parameters(remove_duplicate=False))
         loaded_params: set[str] = set()
         for name, loaded_weight in weights:
+            if "gate_up_proj" in name or "qkv_proj" in name:
+                # 检查该参数是否存在于模型定义中
+                if name in params_dict:
+                    param = params_dict[name]
+                    weight_loader = getattr(param, "weight_loader", default_weight_loader)
+                    weight_loader(param, loaded_weight)
+                    continue
+                    
             if "rotary_emb.inv_freq" in name:
                 continue
             if self.quant_config is not None and (
