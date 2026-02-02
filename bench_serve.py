@@ -24,7 +24,7 @@ LOG_DIR = "/root/autodl-tmp/bench_serve_logs"
 TARGET_MODELS = [
     "LLM-Research/Meta-Llama-3.1-8B",
     "Qwen/Qwen2.5-7B",
-    "Qwen/Qwen2.5-14B"
+    # "Qwen/Qwen2.5-14B"
 ]
 
 HOST = "127.0.0.1"
@@ -156,8 +156,8 @@ def main():
         global_results[model_name] = {}
 
         configs = [
-            {"name": "FP16", "path": full_model_path, "args": ""},
-            {"name": "FP8", "path": full_model_path, "args": "--quantization fp8"},
+            # {"name": "FP16", "path": full_model_path, "args": ""},
+            # {"name": "FP8", "path": full_model_path, "args": "--quantization fp8"},
             {"name": "Micromix", "path": quant_path, "args": "--quantization micromix"}
         ]
 

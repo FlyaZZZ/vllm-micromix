@@ -15,7 +15,7 @@ LOG_DIR = "/root/autodl-tmp/bench_logs"
 TARGET_MODELS = [
     "LLM-Research/Meta-Llama-3.1-8B",
     "Qwen/Qwen2.5-7B",
-    "Qwen/Qwen2.5-14B",
+    # "Qwen/Qwen2.5-14B",
     # "Qwen/Qwen3-4B"
 ]
 
@@ -154,18 +154,18 @@ def main():
         
         # ---------------- 步骤 2: Benchmark 配置 ----------------
         bench_configs = [
-            {
-                "name": "FP16",
-                "model_path": full_model_path,
-                "quant_arg": "", 
-                "available": True
-            },
-            {
-                "name": "FP8",
-                "model_path": full_model_path,
-                "quant_arg": "--quantization fp8",
-                "available": True
-            },
+            # {
+            #     "name": "FP16",
+            #     "model_path": full_model_path,
+            #     "quant_arg": "", 
+            #     "available": True
+            # },
+            # {
+            #     "name": "FP8",
+            #     "model_path": full_model_path,
+            #     "quant_arg": "--quantization fp8",
+            #     "available": True
+            # },
             {
                 "name": "Micromix",
                 "model_path": quant_save_path,
